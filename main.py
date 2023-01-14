@@ -28,7 +28,7 @@ all_coords = []
 for i in x:
     all_coords.append([i.latitude, i.longitude])
 
-print(all_coords)
+#print(all_coords)
 
 @app.route('/data')
 def data():

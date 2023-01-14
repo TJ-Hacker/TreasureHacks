@@ -104,6 +104,12 @@ fetch('/data')
           map: map,
           draggable: false
        });
+
+       google.maps.event.addListener(marker,'dblclick', function(event){
+        marker.setMap(null);
+        let entry = JSON.stringify(event.latLng.toJSON(), null, 2)
+        console.log(entry)
+     });
        
         
       
