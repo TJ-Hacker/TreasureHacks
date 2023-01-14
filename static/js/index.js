@@ -49,7 +49,10 @@ function initMap() {
     let marker = new google.maps.Marker({
         position: event.latLng,
         map: map,
-        draggable: true
+        draggable: true,
+        icon: {
+          url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
+        }
      });
      google.maps.event.addListener(marker,'dblclick', function(event){
         marker.setMap(null);
@@ -102,13 +105,16 @@ fetch('/data')
         let marker = new google.maps.Marker({
           position: {lat: data[i][0], lng: data[i][1]},
           icon: {
-            // url: "http://maps.google.com/mapfiles/ms/icons/green-dot.png"
-            url: "./static/ParkingIcon.png"
+           url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
+            //url: "./static/Button_Icon_Green.svg.png"
           },
           map: map,
           draggable: false
        });
-
+       google.maps.event.addListener(marker, 'mouseover', function(event){
+        console.log("hello");
+       })
+       /*
        google.maps.event.addListener(marker,'dblclick', function(event){
         marker.setMap(null);
         let entry = JSON.stringify(event.latLng.toJSON(), null, 2)
@@ -123,7 +129,7 @@ fetch('/data')
             "content-type" :"application/json"
          })
        })
-     });
+     });*/
        
         
       
