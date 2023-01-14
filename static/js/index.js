@@ -1,6 +1,11 @@
+if (!sessionStorage.getItem('page_reloaded')) {
+  sessionStorage.setItem('page_reloaded', true);
+  location.reload();
+}
 let map, infoWindow;
 
 function initMap() {
+
   map = new google.maps.Map(document.getElementById("map"), {
     center: { lat: 40.650002, lng: -73.949997 },
     zoom: 15,
@@ -84,9 +89,24 @@ window.initMap = initMap;
 // TEST FOR ME
 
 let x;
+
 fetch('/data')
 .then(response => response.json())
 .then(data => {
     console.log(data);
+
+    for(let i = 0; i < data.length; i++){
+      
+        let marker = new google.maps.Marker({
+          position: {lat: data[i][0], lng: data[i][1]},
+          icon: {
+            url: "http://maps.google.com/mapfiles/ms/icons/green-dot.png"                           },
+          map: map,
+          draggable: false
+       });
+       
+        
+      
+    }
     
-})
+})   
