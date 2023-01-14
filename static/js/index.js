@@ -35,7 +35,17 @@ function initMap() {
       // Browser doesn't support Geolocation
       handleLocationError(false, infoWindow, map.getCenter());
     }
-  });
+   });
+   
+   google.maps.event.addListener(map, 'dblclick', function(event){
+    let marker = new google.maps.Marker({
+        position: event.latLng,
+        map: map,
+        draggable: true
+     });
+     console.log(event.latLng);
+    })
+  
 }
 
 function handleLocationError(browserHasGeolocation, infoWindow, pos) {
