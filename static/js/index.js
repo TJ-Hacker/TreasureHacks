@@ -21,6 +21,7 @@ function initMap() {
             lat: position.coords.latitude,
             lng: position.coords.longitude,
           };
+          //console.log(position.coords.latitude);
 
           //infoWindow.setPosition(pos);
           //infoWindow.setContent("Location found.");
@@ -46,7 +47,8 @@ function initMap() {
      google.maps.event.addListener(marker,'dblclick', function(event){
         marker.setMap(null);
      });
-     console.log(event.latLng);
+     console.log(JSON.stringify(event.latLng.toJSON(), null, 2)
+     );
     })
   
 }
