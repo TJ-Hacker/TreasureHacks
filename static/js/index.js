@@ -48,9 +48,20 @@ function initMap() {
         marker.setMap(null);
         
      });
-     console.log(JSON.stringify(event.latLng.toJSON(), null, 2)
-     );
-    })
+     //console.log(JSON.stringify(event.latLng.toJSON(), null, 2));
+     let entry = JSON.stringify(event.latLng.toJSON(), null, 2);
+     console.log(entry);
+
+     fetch ('/add_data', {
+      method : "POST",
+      credentials : 'include',
+      body : JSON.stringify(entry),
+      cache : "no-cache",
+      headers : new Headers ({
+        "content-type" :"application/json"
+     })
+   }) 
+    }) 
   
 }
 
@@ -77,7 +88,5 @@ fetch('/data')
 .then(response => response.json())
 .then(data => {
     console.log(data);
-    for(i in data){
-       console.log(data[i]);
-    }
+    
 })

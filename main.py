@@ -11,8 +11,8 @@ db = SQLAlchemy(app) # initialize flask sql database, db
 
 class locationz(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    latitude = db.Column(db.String, nullable=False) # get the values z
-    longitude = db.Column(db.String, nullable=False) # get the valuez
+    latitude = db.Column(db.Float, nullable=False) # get the values z
+    longitude = db.Column(db.Float, nullable=False) # get the valuez
  
 
 # start
@@ -35,10 +35,32 @@ def data():
     my_list = all_coords
     return jsonify(my_list)
 
-@app.route('/add_data')
+
+
+@app.route('/add_data', methods=['POST'])
 def add_data():
+    if request.method == 'POST':
+        req = request.get_json() # get json data which turns into string
+        #print(req)
+        #print(type(req)) , somehow a string 
+        new_listt = req.split()
+        #print(new_listt)
+        latitude = new_listt[2][:-1]
+        longitude = new_listt[4]
+        #print(latitude)
+        #print(longitude)
+        lat = float(latitude)
+        long = float(longitude) # conver to float
+
+        # PUSH TO DATABASE
+
+        new_push = locationz(latitude=lat, longitude=long)
+        db.session.add(new_push)
+        db.session.commit()
+
+        print(latitude, longitude)
     res = make_response(jsonify({"messsage":"JSON"}), 200)
-    return res
+    return res 
 
 
 if __name__ == "__main__":
