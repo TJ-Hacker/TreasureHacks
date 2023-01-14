@@ -8,13 +8,15 @@
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </head>
 <body class="mainCol">
-    <div id="top">
-        <h1 id="userLoc"><span class="accentCol">Kensington</span>, 11218</h1>
-        <h3 id="traffic">Traffic: <span>High</span></h3>
+    <div id="main">
+        <div id="top">
+            <h1 id="userLoc"><span class="accentCol">Kensington</span>, 11218</h1>
+            <h3 id="traffic">Traffic: <span>High</span></h3>
+        </div>
+    
+        <div id="sliderBox">
+            <input id="radiusSel" type="range" min="0.5" max="3" value="0.5" step="0.1">
+        </div>
     </div>
-
-    <!-- <div id="radiusSel">
-        <input id="radiusSel" type="range" min="0.5" max="5" value="0.5">
-    </div> -->
 </body>
 </html>
