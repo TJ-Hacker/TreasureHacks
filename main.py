@@ -23,15 +23,16 @@ def home():
 #print(locationz.query.filter().all()[0])
 #print(type(locationz.query.filter().all()))
 
-x = locationz.query.filter().all()
-all_coords = []
-for i in x:
-    all_coords.append([i.latitude, i.longitude]) # append the latitude and longitude values, this creates a two dimensional array
+
 
 #print(all_coords)
 
 @app.route('/data')
 def data():
+    x = locationz.query.filter().all()
+    all_coords = []
+    for i in x:
+        all_coords.append([i.latitude, i.longitude]) # append the latitude and longitude values, this creates a two dimensional array
     my_list = all_coords
     return jsonify(my_list)
 

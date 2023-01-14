@@ -67,7 +67,7 @@ function initMap() {
       headers : new Headers ({
         "content-type" :"application/json"
      })
-   })
+   }).then(location.reload());
     }) 
   
 }
