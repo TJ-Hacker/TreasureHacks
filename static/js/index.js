@@ -3,6 +3,10 @@ if (!sessionStorage.getItem('page_reloaded')) {
   location.reload();
 }
 let map, infoWindow;
+// Create info
+
+
+
 
 function initMap() {
 
@@ -49,12 +53,17 @@ function initMap() {
     let marker = new google.maps.Marker({
         position: event.latLng,
         map: map,
-        draggable: true
+        draggable: true,
+
      });
+
+  
      google.maps.event.addListener(marker,'dblclick', function(event){
         marker.setMap(null);
         
      });
+
+     
      //console.log(JSON.stringify(event.latLng.toJSON(), null, 2));
      let entry = JSON.stringify(event.latLng.toJSON(), null, 2);
      console.log(entry);
@@ -69,6 +78,7 @@ function initMap() {
      })
    }).then(location.reload());
     }) 
+    
   
 }
 
@@ -109,6 +119,7 @@ fetch('/data')
           draggable: false
        });
 
+       
        google.maps.event.addListener(marker,'dblclick', function(event){
         marker.setMap(null);
         let entry = JSON.stringify(event.latLng.toJSON(), null, 2)
@@ -125,7 +136,6 @@ fetch('/data')
        })
      });
        
-        
       
     }
     
