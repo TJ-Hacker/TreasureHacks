@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, request, jsonify
+from flask import Flask, render_template, url_for, request, jsonify, make_response
 from flask_sqlalchemy import SQLAlchemy
 
 import os
@@ -18,7 +18,7 @@ class locationz(db.Model):
 # start
 @app.route('/')
 def home():
-    return render_template('home.html')
+    return render_template('index.html')
 
 #print(locationz.query.filter().all()[0])
 #print(type(locationz.query.filter().all()))
@@ -34,6 +34,11 @@ print(all_coords)
 def data():
     my_list = all_coords
     return jsonify(my_list)
+
+@app.route('/add_data')
+def add_data():
+    res = make_response(jsonify({"messsage":"JSON"}), 200)
+    return res
 
 
 if __name__ == "__main__":

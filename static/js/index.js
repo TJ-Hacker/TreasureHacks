@@ -45,6 +45,7 @@ function initMap() {
      });
      google.maps.event.addListener(marker,'dblclick', function(event){
         marker.setMap(null);
+        
      });
      console.log(event.latLng);
     })
