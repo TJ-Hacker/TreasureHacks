@@ -47,8 +47,9 @@ function initMap() {
      google.maps.event.addListener(marker,'dblclick', function(event){
         marker.setMap(null);
      });
-     console.log(JSON.stringify(event.latLng.toJSON(), null, 2)
-     );
+     let obj = JSON.parse(JSON.stringify(event.latLng.toJSON(), null, 2));
+     let lat = obj["lat"];
+     let long = obj["lng"];
     })
   
 }
