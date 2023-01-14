@@ -1,5 +1,7 @@
 from flask import Flask, render_template, url_for, request, jsonify, make_response, redirect
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import Column, DateTime
+from sqlalchemy.sql import func
 import math
 import os
 
@@ -13,6 +15,7 @@ class locationz(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     latitude = db.Column(db.Float, nullable=False) # get the values z
     longitude = db.Column(db.Float, nullable=False) # get the valuez
+    date = db.Column(db.DateTime(timezone=True), default=func.now())
  
 
 # start
@@ -32,7 +35,7 @@ def data():
     x = locationz.query.filter().all()
     all_coords = []
     for i in x:
-        all_coords.append([i.latitude, i.longitude]) # append the latitude and longitude values, this creates a two dimensional array
+        all_coords.append([i.latitude, i.longitude, i.date]) # append the latitude and longitude values, this creates a two dimensional array
     my_list = all_coords
     return jsonify(my_list)
 
