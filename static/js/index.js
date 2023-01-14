@@ -49,3 +49,19 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
 }
 
 window.initMap = initMap;
+
+
+
+
+
+// TEST FOR ME
+
+let x;
+fetch('/data')
+.then(response => response.json())
+.then(data => {
+    console.log(data);
+    for(i in data){
+       console.log(data[i]);
+    }
+})

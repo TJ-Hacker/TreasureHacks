@@ -4,7 +4,7 @@ fetch('/data')
 .then(data => {
     console.log(data);
     for(i in data){
-        console.log('Longitude: ' + data[i])
+        console.log(data[i])
     }
 })
 
