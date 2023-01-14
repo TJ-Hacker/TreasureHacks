@@ -18,7 +18,7 @@ class locationz(db.Model):
 # start
 @app.route('/')
 def home():
-    return render_template('index.html')
+    return render_template('home.html')
 
 #print(locationz.query.filter().all()[0])
 #print(type(locationz.query.filter().all()))

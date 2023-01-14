@@ -11,14 +11,22 @@
 <body class="mainCol">
     <div id="main">
         <div id="top">
+            <p id="appName">Spots</p>
             <h1 id="userLoc"><span class="accentCol">Kensington</span>, 11218</h1>
             <h3 id="traffic">Traffic: <span>High</span></h3>
         </div>
         <div id="map"></div>
     
-        <div id="sliderBox">
+
+        <!-- This slider will be implemented later | will be used for setting the search radius -->
+
+        <!-- <div id="sliderBox">
             <input id="radiusSel" type="range" min="0.5" max="3" value="0.5" step="0.1">
-        </div>
+        </div> -->
     </div>
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCUh6dZxjaxL1tjE2Kbkf8uBUSnkKe1WZE&callback=initMap&v=weekly"
+      defer
+    ></script>
 </body>
 </html>
