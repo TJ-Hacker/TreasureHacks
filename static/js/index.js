@@ -9,14 +9,16 @@ function initMap() {
   map = new google.maps.Map(document.getElementById("map"), {
     center: { lat: 40.650002, lng: -73.949997 },
     zoom: 15,
+    disableDefaultUI: true,
+    // fullscreenControl: false
   });
   infoWindow = new google.maps.InfoWindow();
 
   const locationButton = document.createElement("button");
 
-  locationButton.textContent = "Switch to Current Location";
-  locationButton.classList.add("custom-map-control-button");
-  map.controls[google.maps.ControlPosition.TOP_CENTER].push(locationButton);
+  locationButton.textContent = "Center";
+  locationButton.classList.add("center-button");
+  map.controls[google.maps.ControlPosition.TOP_RIGHT].push(locationButton);
   locationButton.addEventListener("click", () => {
     // Try HTML5 geolocation.
     if (navigator.geolocation) {
@@ -100,7 +102,9 @@ fetch('/data')
         let marker = new google.maps.Marker({
           position: {lat: data[i][0], lng: data[i][1]},
           icon: {
-            url: "http://maps.google.com/mapfiles/ms/icons/green-dot.png"                           },
+            // url: "http://maps.google.com/mapfiles/ms/icons/green-dot.png"
+            url: "./static/ParkingIcon.png"
+          },
           map: map,
           draggable: false
        });
