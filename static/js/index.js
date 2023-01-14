@@ -67,7 +67,7 @@ function initMap() {
       headers : new Headers ({
         "content-type" :"application/json"
      })
-   }) 
+   })
     }) 
   
 }
@@ -113,6 +113,16 @@ fetch('/data')
         marker.setMap(null);
         let entry = JSON.stringify(event.latLng.toJSON(), null, 2)
         console.log(entry)
+        
+        fetch ('/delete_data', {
+          method : "POST",
+          credentials : 'include',
+          body : JSON.stringify(entry),
+          cache : "no-cache",
+          headers : new Headers ({
+            "content-type" :"application/json"
+         })
+       })
      });
        
         

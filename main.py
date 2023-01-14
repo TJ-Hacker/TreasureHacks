@@ -1,6 +1,6 @@
-from flask import Flask, render_template, url_for, request, jsonify, make_response
+from flask import Flask, render_template, url_for, request, jsonify, make_response, redirect
 from flask_sqlalchemy import SQLAlchemy
-
+import math
 import os
 
 
@@ -26,7 +26,7 @@ def home():
 x = locationz.query.filter().all()
 all_coords = []
 for i in x:
-    all_coords.append([i.latitude, i.longitude])
+    all_coords.append([i.latitude, i.longitude]) # append the latitude and longitude values, this creates a two dimensional array
 
 #print(all_coords)
 
@@ -47,8 +47,8 @@ def add_data():
         #print(new_listt)
         latitude = new_listt[2][:-1]
         longitude = new_listt[4]
-        #print(latitude)
-        #print(longitude)
+        print(latitude)
+        print(longitude)
         lat = float(latitude)
         long = float(longitude) # conver to float
 
@@ -59,8 +59,39 @@ def add_data():
         db.session.commit()
 
         print(latitude, longitude)
+        return redirect(url_for('home'))
     res = make_response(jsonify({"messsage":"JSON"}), 200)
     return res 
+
+
+# make a function to delete the location data (Note: Authentication not implemented yet!)
+@app.route("/delete_data", methods=["POST"])
+def delete_data():
+    if request.method == "POST":
+        # get the data from JavaScript 
+        req = request.get_json()
+        #print(req)
+        new_listt = req.split()
+        #print(new_listt)
+        latitude = new_listt[2][:-1]
+        longitude = new_listt[4]
+
+        lat = float(latitude)
+        long = float(longitude)
+
+        print(lat, long)
+        
+        latt = locationz.query.filter_by(latitude=lat).first()
+        longg = locationz.query.filter_by(longitude=long).first()
+        if latt and longg:
+            print("Latitude and Longitude exists")
+            db.session.delete(latt)
+            db.session.commit()
+        else:
+            print("Non exist")
+
+    res = make_response(jsonify({"messsage":"JSON"}), 200)
+    return res
 
 
 if __name__ == "__main__":
