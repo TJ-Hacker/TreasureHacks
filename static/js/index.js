@@ -53,8 +53,7 @@ function initMap() {
     let marker = new google.maps.Marker({
         position: event.latLng,
         map: map,
-        draggable: true,
-
+        draggable: true
      });
 
   
@@ -112,14 +111,26 @@ fetch('/data')
         let marker = new google.maps.Marker({
           position: {lat: data[i][0], lng: data[i][1]},
           icon: {
-            // url: "http://maps.google.com/mapfiles/ms/icons/green-dot.png"
-            url: "./static/ParkingIcon.png"
+           url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
+            //url: "./static/Button_Icon_Green.svg.png"
           },
           map: map,
           draggable: false
        });
-
        
+       var infowindow = new google.maps.InfoWindow({
+        content: "<p style='color: black; font-size: 20px'>Parking Spot <b> avaiable </b>. <br> <b>Time Posted:<b> " + data[i][2] +" <br> Double Click to Delete if the spot has been taken or if you took it!</p>"
+       });
+       
+       marker.addListener('mouseover', function() {
+        infowindow.open(map, marker);
+       });
+
+       marker.addListener('mouseout', function() {
+        infowindow.close();
+       });
+
+
        google.maps.event.addListener(marker,'dblclick', function(event){
         marker.setMap(null);
         let entry = JSON.stringify(event.latLng.toJSON(), null, 2)
