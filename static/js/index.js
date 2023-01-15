@@ -21,7 +21,6 @@ function initMap() {
     // fullscreenControl: false
   });
   infoWindow = new google.maps.InfoWindow();
-
   const locationButton = document.createElement("button");
   locationButton.textContent = "Center";
   locationButton.classList.add("center-button");
@@ -121,7 +120,6 @@ fetch('/data')
        });
        
       
-       let date = new Date(data[i][2]);
        let time = date.toLocaleTimeString();
        var infowindow = new google.maps.InfoWindow({
         content: "<p style='color: black; font-size: 20px'>Parking Spot <b> available </b> <br> <b>Time Posted:<b> " + time +" <br> Double click if the spot has been taken or if you took it!</p>"
