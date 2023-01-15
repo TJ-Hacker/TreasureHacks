@@ -163,3 +163,39 @@ For Pre-loader
     height: 50px;
     animation: spin 0.5s linear infinite;
   }
+
+  .key {
+    display: flex;
+    flex-wrap: wrap;
+    color: black;
+    align-items: center;
+  }
+  
+  .key-item {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+  }
+  
+  .key-item-label {
+    font-size: 0.8em;
+  }
+  
+  .green {
+    background-color: green;
+  }
+  
+  .yellow {
+    background-color: yellow;
+  }
+  
+  .red {
+    background-color: red;
+  }
+  
+  /* Responsive styles */
+  @media (max-width: 600px) {
+    .key-item-label {
+      font-size: 0.6em;
+    }
+  }
