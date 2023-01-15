@@ -121,9 +121,10 @@ fetch('/data')
           map: map,
           draggable: false
        });
-       
+       let date = new Date(data[i][2]);
+       let time = date.toLocaleTimeString();
        var infowindow = new google.maps.InfoWindow({
-        content: "<p style='color: black; font-size: 20px'>Parking Spot <b> avaiable </b>. <br> <b>Time Posted:<b> " + data[i][2] +" <br> Double Click to Delete if the spot has been taken or if you took it!</p>"
+        content: "<p style='color: black; font-size: 20px'>Parking Spot <b> available </b> <br> <b>Time Posted:<b> " + time +" <br> Double click if the spot has been taken or if you took it!</p>"
        });
        
        marker.addListener('mouseover', function() {
