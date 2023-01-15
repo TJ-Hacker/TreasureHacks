@@ -120,7 +120,24 @@ fetch('/data')
           map: map,
           draggable: false
        });
+       let currDate = new Date();
        let date = new Date(data[i][2]);
+
+       if(diff_minutes(currDate, date)>50){
+        //console.log("delete");
+        marker.setMap(null);
+        let entry = JSON.stringify(marker.position.toJSON(), null, 2);
+        fetch ('/delete_data', {
+          method : "POST",
+          credentials : 'include',
+          body : JSON.stringify(entry),
+          cache : "no-cache",
+          headers : new Headers ({
+            "content-type" :"application/json"
+         })
+       })
+       }
+      
        let time = date.toLocaleTimeString();
        var infowindow = new google.maps.InfoWindow({
         content: "<p style='color: black; font-size: 20px'>Parking Spot <b> available </b> <br> <b>Time Posted:<b> " + time +" <br> Double click if the spot has been taken or if you took it!</p>"
@@ -155,3 +172,13 @@ fetch('/data')
     }
     
 })   
+
+
+function diff_minutes(dt2, dt1) 
+ {
+
+  var diff =(dt2.getTime() - dt1.getTime()) / 1000;
+  diff /= 60;
+  return Math.abs(Math.round(diff));
+
+ }

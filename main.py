@@ -50,7 +50,7 @@ def data():
     x = locationz.query.filter().all()
     all_coords = []
     for i in x:
-        all_coords.append([i.latitude, i.longitude, i.date]) # append the latitude and longitude values, this creates a two dimensional array
+        all_coords.append([i.latitude, i.longitude, i.date, i.p_density]) # append the latitude and longitude values, this creates a two dimensional array
     my_list = all_coords
     return jsonify(my_list)
 
