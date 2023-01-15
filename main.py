@@ -2,6 +2,7 @@ from flask import Flask, render_template, url_for, request, jsonify, make_respon
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Column, DateTime
 from sqlalchemy.sql import func
+import json
 import math
 import os
 
@@ -46,13 +47,16 @@ def add_data():
     if request.method == 'POST':
         req = request.get_json() # get json data which turns into string
         #print(req)
+
+        new_req = json.loads(req)
+        #print(new_req)
         #print(type(req)) , somehow a string 
-        new_listt = req.split()
+        #new_listt = req.split()
         #print(new_listt)
-        latitude = new_listt[2][:-1]
-        longitude = new_listt[4]
-        print(latitude)
-        print(longitude)
+        latitude = new_req['lat']
+        longitude = new_req['lng']
+        #print(latitude)
+        #print(longitude)
         lat = float(latitude)
         long = float(longitude) # conver to float
 
@@ -75,10 +79,12 @@ def delete_data():
         # get the data from JavaScript 
         req = request.get_json()
         #print(req)
+
+        new_req = json.loads(req)
         new_listt = req.split()
         #print(new_listt)
-        latitude = new_listt[2][:-1]
-        longitude = new_listt[4]
+        latitude = new_req['lat']
+        longitude = new_req['lng']
 
         lat = float(latitude)
         long = float(longitude)

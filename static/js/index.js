@@ -1,12 +1,16 @@
+
+
+setTimeout(function(){
+  document.querySelector(".preloader").style.display = "none";
+}, 1000);
+
 if (!sessionStorage.getItem('page_reloaded')) {
   sessionStorage.setItem('page_reloaded', true);
   location.reload();
 }
+
 let map, infoWindow;
 // Create info
-
-
-
 
 function initMap() {
 
