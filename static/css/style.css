@@ -115,3 +115,51 @@ html, body {
 /* 
 * Optional: Makes the sample page fill the window. 
 */
+
+
+/*
+For Pre-loader
+*/
+
+.preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #37323E;
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .preloader-text {
+    font-size: 2rem;
+    font-weight: bold;
+    color: white;
+    font-family: 'Arbutus', cursive;
+    font-family: 'Barriecito', cursive;
+    font-family: 'EB Garamond', serif;
+    font-family: 'Kolker Brush', cursive;
+    font-family: 'Permanent Marker', cursive;
+    font-family: 'Syne Mono', monospace;
+    text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #433e4b, 0 0 30px #403b49, 0 0 40px #453e4e, 0 0 50px #463f50, 0 0 75px #4f4859;
+
+  }
+  
+  /* Add animation for preloader */
+  @keyframes spin {
+    from {transform: rotate(0deg);}
+    to {transform: rotate(360deg);}
+  }
+  
+  .preloader:before {
+    content: "";
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #3498db;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 0.5s linear infinite;
+  }
