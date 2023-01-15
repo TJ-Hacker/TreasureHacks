@@ -50,7 +50,7 @@ def data():
     x = locationz.query.filter().all()
     all_coords = []
     for i in x:
-        all_coords.append([i.latitude, i.longitude, i.date]) # append the latitude and longitude values, this creates a two dimensional array
+        all_coords.append([i.latitude, i.longitude, i.date, i.p_density]) # append the latitude and longitude values, this creates a two dimensional array
     my_list = all_coords
     return jsonify(my_list)
 
@@ -83,8 +83,17 @@ def add_data():
 )
         generated_text = ai_response.choices[0].text
         print(generated_text)
+        number = ""
+        firstNumFound = False
+        for i in generated_text:
+            if i.isnumeric():
+                number+=i
+                firstNumFound = True
+            if firstNumFound:
+                if i == '.' or i == ' ':
+                    break
 
-        p_density = float(generated_text)
+        p_density = float(number)
         #print(p_density)
         new_push = locationz(latitude=lat, longitude=long, city=city, p_density=p_density)
         db.session.add(new_push)

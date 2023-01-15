@@ -1,5 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200&display=swap');
-
+*{
+    color:white;
+}
 html, body {
     height: 100%;
     width:100%;
@@ -162,4 +164,39 @@ For Pre-loader
     width: 50px;
     height: 50px;
     animation: spin 0.5s linear infinite;
+  }
+
+  .key {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  
+  .key-item {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+  }
+  
+  .key-item-label {
+    font-size: 0.8em;
+  }
+  
+  .green {
+    background-color: green;
+  }
+  
+  .yellow {
+    background-color: yellow;
+  }
+  
+  .red {
+    background-color: red;
+  }
+  
+  /* Responsive styles */
+  @media (max-width: 600px) {
+    .key-item-label {
+      font-size: 0.6em;
+    }
   }
