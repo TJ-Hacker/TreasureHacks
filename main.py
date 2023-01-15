@@ -5,20 +5,32 @@ from sqlalchemy.sql import func
 from passwords import *
 import json
 import math
+import reverse_geocoder as rg
+import pprint
 import os
 
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get('FLASK_PASSWORD') # note make sure this secret key is hidden at all times
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db' # initialize flask sql database
 db = SQLAlchemy(app) # initialize flask sql database, db
+
+# all functions
+
+# get name of city
+def reverseGeocode(coordinates):
+    result = rg.search(coordinates)
+     
+    # result is a list containing ordered dictionary.
+    return result[0]['name']
 
 class locationz(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     latitude = db.Column(db.Float, nullable=False) # get the values z
     longitude = db.Column(db.Float, nullable=False) # get the valuez
     date = db.Column(db.DateTime(timezone=True), default=func.now())
-    Address = db.Column(db.String, nullable=False)
+    city = db.Column(db.String, nullable=False)
 
 # start
 @app.route('/')
@@ -50,10 +62,6 @@ def add_data():
         #print(req)
 
         new_req = json.loads(req)
-        #print(new_req)
-        #print(type(req)) , somehow a string 
-        #new_listt = req.split()
-        #print(new_listt)
         latitude = new_req['lat']
         longitude = new_req['lng']
         #print(latitude)
@@ -62,8 +70,12 @@ def add_data():
         long = float(longitude) # conver to float
 
         # PUSH TO DATABASE
+        coordinates = (lat,long)
+        city = reverseGeocode(coordinates)
 
-        new_push = locationz(latitude=lat, longitude=long)
+        print(city)
+
+        new_push = locationz(latitude=lat, longitude=long, city=city)
         db.session.add(new_push)
         db.session.commit()
 
@@ -82,7 +94,7 @@ def delete_data():
         #print(req)
 
         new_req = json.loads(req)
-        new_listt = req.split()
+        #new_listt = req.split()
         #print(new_listt)
         latitude = new_req['lat']
         longitude = new_req['lng']
