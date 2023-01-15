@@ -14,26 +14,22 @@
     <script src="{{ url_for('static', filename='js/index.js') }}"></script>
 </head>
 <div class="preloader">
-  <div class="preloader-text">ParkingFinder</div>
+  <div class="preloader-text">ParkR</div>
 </div>
 <body class="mainCol">
     <div id="main">
         <div id="top">
-            <p id="appName">Spots</p>
-            <h1 id="userLoc"><span class="accentCol">Kensington</span>, 11218</h1>
-            <h3 id="traffic">Traffic: <span>High</span></h3>
-            
-            
+          <p style="font-size: 10px">The three colors below refer to the icon color. The risk of the parking spot being taken</p>
+          <div class="key">
+            <div class="key-item green"></div>
+            <div class="key-item-label"><b>Low Risk</b></div>
+            <div class="key-item yellow"></div>
+            <div class="key-item-label"><b>Moderate Risk</b></div>
+            <div class="key-item red"></div>
+            <div class="key-item-label"><b>High Risk</b></div>
         </div>
-        <p style="color: black; font-size: 10px">The three colors below refer to the icon color</p>
-        <div class="key">
-          <div class="key-item green"></div>
-          <div class="key-item-label"><b>Low Risk</b></div>
-          <div class="key-item yellow"></div>
-          <div class="key-item-label"><b>Moderate Risk</b></div>
-          <div class="key-item red"></div>
-          <div class="key-item-label"><b>High Risk</b></div>
         </div>
+
         <div id="map"></div>
     
 
@@ -42,10 +38,9 @@
         <!-- <div id="sliderBox">
             <input id="radiusSel" type="range" min="0.5" max="3" value="0.5" step="0.1">
         </div> -->
-    </div>
     <nav class="navbar fixed-bottom navbar-dark bg-dark" data-bs-theme="dark">
         <div class="container-fluid">
-          <a class="navbar-brand" href="#">ParkingFinder</a>
+          <a class="navbar-brand" href="#">ParkR</a>
         </div>
       </nav>
     <script
