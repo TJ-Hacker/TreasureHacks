@@ -2,6 +2,7 @@ from flask import Flask, render_template, url_for, request, jsonify, make_respon
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Column, DateTime
 from sqlalchemy.sql import func
+from passwords import *
 import json
 import math
 import os
@@ -17,12 +18,12 @@ class locationz(db.Model):
     latitude = db.Column(db.Float, nullable=False) # get the values z
     longitude = db.Column(db.Float, nullable=False) # get the valuez
     date = db.Column(db.DateTime(timezone=True), default=func.now())
- 
+    Address = db.Column(db.String, nullable=False)
 
 # start
 @app.route('/')
 def home():
-    return render_template('home.html')
+    return render_template('home.html', api_key=api_key)
 
 #print(locationz.query.filter().all()[0])
 #print(type(locationz.query.filter().all()))
