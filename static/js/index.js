@@ -7,7 +7,6 @@ let map, infoWindow;
 
 
 
-
 function initMap() {
 
   map = new google.maps.Map(document.getElementById("map"), {
@@ -19,7 +18,6 @@ function initMap() {
   infoWindow = new google.maps.InfoWindow();
 
   const locationButton = document.createElement("button");
-
   locationButton.textContent = "Center";
   locationButton.classList.add("center-button");
   map.controls[google.maps.ControlPosition.TOP_RIGHT].push(locationButton);
@@ -55,7 +53,6 @@ function initMap() {
         map: map,
         draggable: true
      });
-
   
      google.maps.event.addListener(marker,'dblclick', function(event){
         marker.setMap(null);
@@ -104,8 +101,8 @@ let x;
 fetch('/data')
 .then(response => response.json())
 .then(data => {
-    console.log(data);
-
+//    console.log(data);
+//    const geocoder = new google.maps.Geocoder();
     for(let i = 0; i < data.length; i++){
       
         let marker = new google.maps.Marker({
@@ -117,6 +114,8 @@ fetch('/data')
           map: map,
           draggable: false
        });
+       
+      
        let date = new Date(data[i][2]);
        let time = date.toLocaleTimeString();
        var infowindow = new google.maps.InfoWindow({
