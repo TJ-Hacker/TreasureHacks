@@ -83,18 +83,8 @@ def add_data():
 )
         generated_text = ai_response.choices[0].text
         print(generated_text)
-        number = ""
-        firstNumFound = False
-        for i in generated_text:
-            if i.isnumeric():
-                number+=i
-                firstNumFound = True
-            if firstNumFound:
-                if i == '.' or i == ' ':
-                    break
-        
-        p_density = float(number)
 
+        p_density = float(generated_text)
         #print(p_density)
         new_push = locationz(latitude=lat, longitude=long, city=city, p_density=p_density)
         db.session.add(new_push)
