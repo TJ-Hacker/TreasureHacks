@@ -4,11 +4,10 @@ from sqlalchemy import Column, DateTime
 from sqlalchemy.sql import func
 from passwords import *
 import json
-import math
 import reverse_geocoder as rg
 import pprint
 import os
-
+import openai
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get('FLASK_PASSWORD') # note make sure this secret key is hidden at all times
@@ -31,6 +30,8 @@ class locationz(db.Model):
     longitude = db.Column(db.Float, nullable=False) # get the valuez
     date = db.Column(db.DateTime(timezone=True), default=func.now())
     city = db.Column(db.String, nullable=False)
+    p_density = db.Column(db.Float, nullable=False)
+   
 
 # start
 @app.route('/')
@@ -72,14 +73,34 @@ def add_data():
         # PUSH TO DATABASE
         coordinates = (lat,long)
         city = reverseGeocode(coordinates)
+        print(type(city))
+        #print(city)
+        openai.api_key = open_ai_key # USING THE OPEN AI API KEY!
 
-        print(city)
+        ai_response = openai.Completion.create(
+    prompt=f"What is the population density of {city} and only give a number/float, no other words just one singular number",
+    engine="text-davinci-002"
+)
+        generated_text = ai_response.choices[0].text
+        print(generated_text)
+        number = ""
+        firstNumFound = False
+        for i in generated_text:
+            if i.isnumeric():
+                number+=i
+                firstNumFound = True
+            if firstNumFound:
+                if i == '.' or i == ' ':
+                    break
+        
+        p_density = float(number)
 
-        new_push = locationz(latitude=lat, longitude=long, city=city)
+        #print(p_density)
+        new_push = locationz(latitude=lat, longitude=long, city=city, p_density=p_density)
         db.session.add(new_push)
         db.session.commit()
 
-        print(latitude, longitude)
+        #print(latitude, longitude)
         return redirect(url_for('home'))
     res = make_response(jsonify({"messsage":"JSON"}), 200)
     return res 
