@@ -125,11 +125,11 @@ fetch('/data')
        let currDate = new Date();
        let date = new Date(data[i][2]);
        let diffe = diff_minutes(currDate, date);
-       console.log("time difference" + diffe);
+       //console.log("time difference" + diffe);
 
        let density = parseInt(data[i][3]);
        let density_val;
-       console.log("density" + density);
+       //console.log("density" + density);
        if(density<=500){
         density_val = 0;
        }
@@ -165,8 +165,9 @@ fetch('/data')
        })
        }
        let time = date.toLocaleTimeString();
+       console.log(time);
        var infowindow = new google.maps.InfoWindow({
-        content: "<p style='color: black; font-size: 20px'>Parking Spot <b> available </b> <br> <b>Time Posted:<b> " + time +" <br> " + diff_minutes(currDate, date) +  " </b>minutes ago <br> Double click if the spot has been taken or if you took it!</p>"
+        content: "<p style='color: black; font-size: 20px'>Parking Spot available <br> Time Posted: " + time +" <br> " + diff_minutes(currDate, date) +  " minutes ago <br> Double click if the spot has been taken or if you took it!</p>"
        });
        
        markerA.addListener('mouseover', function() {
