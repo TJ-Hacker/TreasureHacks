@@ -82,8 +82,7 @@ def add_data():
     engine="text-davinci-002"
 )
         generated_text = ai_response.choices[0].text
-        #print(generated_text)
-
+        print(generated_text)
         number = ""
         firstNumFound = False
         for i in generated_text:
@@ -93,7 +92,7 @@ def add_data():
             if firstNumFound:
                 if i == '.' or i == ' ':
                     break
-        print(number)
+
         p_density = float(number)
         #print(p_density)
         new_push = locationz(latitude=lat, longitude=long, city=city, p_density=p_density)
