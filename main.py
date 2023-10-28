@@ -8,7 +8,8 @@ import reverse_geocoder as rg
 import pprint
 import os
 import openai
-
+# NEW REQUIREMENTS.TXXT
+# set up all the necessary keys
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get('FLASK_PASSWORD') # note make sure this secret key is hidden at all times
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -35,26 +36,26 @@ def reverseGeocode(coordinates):
 
 # USE THE OPENAI from the BSMP
 
-def question_gen(txt_prompt):
+def ai_gen(city):
   response = openai.ChatCompletion.create(
     engine=OPENAI_MODEL,
     messages=[
       {
         "role": "system",
-        "content": "You are a top level PDF extractor and question creator"
+        "content": "Get the city and retrieve the population density and only the population density, meaning only respond with the number and not any text or other characters besides digits"
       },
       {
         "role": "user",
-        "content": txt_prompt
+        "content": city
       },
     ])
   
   generated_text = response['choices'][0]['message']['content']
+  print(generated_text)
+  
+  return generated_text
 
-  questions = generated_text.split("\n") # turn the string to a list
-  return questions
-
-
+# database class
 class locationz(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     latitude = db.Column(db.Float, nullable=False) # get the values z
@@ -75,7 +76,7 @@ def home():
 
 
 #print(all_coords)
-
+# SEND THE DATA TO THE JAVASCRIPT FILE 
 @app.route('/data')
 def data():
     x = locationz.query.filter().all()
@@ -86,7 +87,7 @@ def data():
     return jsonify(my_list)
 
 
-
+# add data into the database
 @app.route('/add_data', methods=['POST'])
 def add_data():
     if request.method == 'POST':
@@ -106,22 +107,27 @@ def add_data():
         print(coordinates)
         city = reverseGeocode(coordinates)
         #print(type(city))
-        #print(city)
-        generated_text='s'
+        print(city)
+        #generated_text= ai_gen(city)
         firstNumFound = False
-        for i in generated_text:
+
+
+        '''for i in generated_text:
             if i.isnumeric():
                 number+=i
                 firstNumFound = True
             if firstNumFound:
                 if i == '.' or i == ' ':
-                    break
+                    break'''
 
-        p_density = float(number)
-        #print(p_density)
+
+        # NOTE: CODE IS STILL IN PRODUCTION, WILL NOT BE ACCURATE STILL NEED TO ADD IN THE OPENAI
+        p_density = 6.2
+        print(p_density)
+        # Add to database and commit to database
         new_push = locationz(latitude=lat, longitude=long, city=city, p_density=p_density)
         db.session.add(new_push)
-        db.session.commit()
+        db.session.commit() 
 
         #print(latitude, longitude)
         return redirect(url_for('home'))
