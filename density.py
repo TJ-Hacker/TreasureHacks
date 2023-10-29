@@ -56,3 +56,11 @@ nycInfo = pd.read_csv('nyc_zipcodes.csv')
 #result = filtered_row['Zip']
 #print(result)
 #result = filter_row['Zip']
+
+# Test - 2: Get the population density based on the zipcode
+zip  = 10011
+
+
+density = nycInfo.query(f"Zip=={zip}")["density"].iloc[0] # iloc - access the first element in this series 
+print(density)
+#print(type(density)) # returns a float

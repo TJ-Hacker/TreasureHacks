@@ -4,6 +4,7 @@ from sqlalchemy import Column, DateTime
 from sqlalchemy.sql import func
 from passwords import *
 import json
+import pandas as pd
 import reverse_geocoder as rg
 import pprint
 import os
@@ -23,7 +24,7 @@ openai.api_type = 'azure'
 openai.api_version = "2023-03-15-preview"
 OPENAI_MODEL = "gpt-35-turbo"
 
-
+nycInfo = pd.read_csv('nyc_zipcodes.csv')
 # all functions
 
 
@@ -63,6 +64,7 @@ class locationz(db.Model):
     latitude = db.Column(db.Float, nullable=False) # get the values z
     longitude = db.Column(db.Float, nullable=False) # get the valuez
     date = db.Column(db.DateTime(timezone=True), default=func.now())
+    zipcode = db.Column(db.Integer, nullable=False) # get the integer
     city = db.Column(db.String, nullable=False)
     p_density = db.Column(db.Float, nullable=False)
    
@@ -125,15 +127,11 @@ def add_data():
         
         # Find population density using the nyc_zipcodes.csv
 
-        """# NOTE: CODE IS STILL IN PRODUCTION, WILL NOT BE ACCURATE STILL NEED TO ADD IN THE OPENAI
-        p_density = 6.2
-        #print(p_density)
-        # Add to database and commit to database
-        new_push = locationz(latitude=latitude, longitude=longitude, city=city, p_density=p_density)
+        p_density = nycInfo.query(f"Zip=={zip}")["density"].iloc[0]
+        print(p_density)
+        new_push = locationz(latitude=float(latitude), longitude=float(longitude), city=city, p_density=p_density, zipcode=zip)
         db.session.add(new_push)
         db.session.commit() 
-
-        #print(latitude, longitude)"""
         return redirect(url_for('home'))
     res = make_response(jsonify({"messsage":"JSON"}), 200)
     return res 
