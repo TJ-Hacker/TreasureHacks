@@ -90,35 +90,42 @@ def data():
 def add_data():
     if request.method == 'POST':
         req = request.get_json() # get json data which turns into string
-        #print(req)
 
-        new_req = json.loads(req)
-        #print(new_req)
-        latitude = new_req['lat'] # float value
-        longitude = new_req['lng']
-        
+        # NOTE ALL 3 ARE STRING VALUES 
+        latitude = req['latitude']
+        longitude = req['longitude']
+        zipcode = req['zipcode']
+        #city = req['city']
+        # Print the extracted values.
+        print(f'Latitude: {latitude}, Longitude: {longitude}, Zipcode: {zipcode}') # returns latitude, longitude and ZIPCODE!
 
+        # Get the city based on the zipcode (NOTE THIS ONLY FOR NYC SO NYC ZIP CODES only - Future plans may include more cities)
+        # Source of csv file: https://www.fourfront.us/data/datasets/us-population-density/ - check density.py file for more notes 
+        # Brooklyn Zipcodes: 11201 - 11256
+        # Queens Zipcodes: 11004 - 11697
+        # New York (Manhattan) Zipcodes: 10001 - 10286
+        # Bronx Zipcodes: 10451 - 10475
+        # Staten Island ZipCodes: 10301 - 10314
 
-        # PUSH TO DATABASE
-        coordinates = (latitude,longitude)
-        print(coordinates)
-        city = reverseGeocode(coordinates)
-        #print(type(city))
+        # use if statements to assign city value based on the zipcode data (from csv )
+        city = ""
+        zip = int(zipcode)
+        if zip >= 11201 and zip <= 11256:
+            city = 'Brooklyn'
+        elif zip >= 11004 and zip<= 11697:
+            city = 'Queens'
+        elif zip >= 10001 and zip<= 10286:
+            city = 'Manhattan'
+        elif zip >= 10451 and zip<= 10475:
+            city = 'Bronx'
+        else:
+            city = 'Staten Island'
+
         print(city)
-        #generated_text= ai_gen(city)
-        firstNumFound = False
+        
+        # Find population density using the nyc_zipcodes.csv
 
-
-        '''for i in generated_text:
-            if i.isnumeric():
-                number+=i
-                firstNumFound = True
-            if firstNumFound:
-                if i == '.' or i == ' ':
-                    break'''
-
-
-        # NOTE: CODE IS STILL IN PRODUCTION, WILL NOT BE ACCURATE STILL NEED TO ADD IN THE OPENAI
+        """# NOTE: CODE IS STILL IN PRODUCTION, WILL NOT BE ACCURATE STILL NEED TO ADD IN THE OPENAI
         p_density = 6.2
         #print(p_density)
         # Add to database and commit to database
@@ -126,7 +133,7 @@ def add_data():
         db.session.add(new_push)
         db.session.commit() 
 
-        #print(latitude, longitude)
+        #print(latitude, longitude)"""
         return redirect(url_for('home'))
     res = make_response(jsonify({"messsage":"JSON"}), 200)
     return res 

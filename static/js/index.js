@@ -69,10 +69,12 @@ function initMap() {
      
      //console.log(JSON.stringify(event.latLng.toJSON(), null, 2));
      //alert(JSON.stringify(event, null, 2)) - NOTE, DOES NOT TELL US ANY DATA ON ZIPCODE
-     let entry = JSON.stringify(event.latLng.toJSON(), null, 2);
-     console.log(entry);
+
+     //let entry = JSON.stringify(event.latLng.toJSON(), null, 2);
+     //console.log(entry);
       /*Code to add data using the fetch api */
-     fetch ('/add_data', {
+      
+     /*fetch ('/add_data', {
       method : "POST",
       credentials : 'include',
       body : JSON.stringify(entry),
@@ -81,9 +83,47 @@ function initMap() {
         "content-type" :"application/json"
      })
    }).then(location.reload());
-    }) 
+    })*/
+    let geocoder = new google.maps.Geocoder();
+    let latLng = event.latLng;
     
-  
+    // Send a geocoding request to Google Maps Geocoding API.
+    geocoder.geocode({ location: latLng }, (results, status) => {
+      if (status === google.maps.GeocoderStatus.OK) {
+        // Extract the postal code (zipcode) from the geocoding results.
+        const zipcode = findZipCodeInResults(results[0]);
+
+        // Extract the exact latitude and longitude as strings.
+        const latitude = latLng.lat().toString();
+        const longitude = latLng.lng().toString();
+    
+        // Create an object with latitude, longitude, and zipcode.
+        const locationData = {
+          latitude: latitude,
+          longitude: longitude,
+          zipcode: zipcode
+        };
+    
+        // Send the location data to the server using a fetch request.
+        fetch('/add_data', {
+          method: 'POST',
+          credentials: 'include',
+          body: JSON.stringify(locationData),
+          headers: { 'Content-Type': 'application/json' }
+        }).then(() => location.reload());
+      }
+    });
+    
+    // Helper function to find the zipcode from geocoding results.
+    function findZipCodeInResults(geocodeResult) {
+      for (let component of geocodeResult.address_components) {
+        if (component.types.includes('postal_code')) {
+          return component.short_name;
+        }
+      }
+      return null; // Return null if no zipcode is found.
+    }})
+   
 }
 
 function handleLocationError(browserHasGeolocation, infoWindow, pos) {
