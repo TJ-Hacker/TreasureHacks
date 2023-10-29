@@ -26,6 +26,8 @@ OPENAI_MODEL = "gpt-35-turbo"
 
 # all functions
 
+
+
 # get name of city
 def reverseGeocode(coordinates):
     result = rg.search(coordinates)
@@ -70,10 +72,6 @@ class locationz(db.Model):
 def home():
     return render_template('home.html', api_key=api_key)
 
-#print(locationz.query.filter().all()[0])
-#print(type(locationz.query.filter().all()))
-
-
 
 #print(all_coords)
 # SEND THE DATA TO THE JAVASCRIPT FILE 
@@ -95,15 +93,14 @@ def add_data():
         #print(req)
 
         new_req = json.loads(req)
-        latitude = new_req['lat']
+        #print(new_req)
+        latitude = new_req['lat'] # float value
         longitude = new_req['lng']
-        #print(latitude)
-        #print(longitude)
-        lat = float(latitude)
-        long = float(longitude) # conver to float
+        
+
 
         # PUSH TO DATABASE
-        coordinates = (lat,long)
+        coordinates = (latitude,longitude)
         print(coordinates)
         city = reverseGeocode(coordinates)
         #print(type(city))
@@ -123,9 +120,9 @@ def add_data():
 
         # NOTE: CODE IS STILL IN PRODUCTION, WILL NOT BE ACCURATE STILL NEED TO ADD IN THE OPENAI
         p_density = 6.2
-        print(p_density)
+        #print(p_density)
         # Add to database and commit to database
-        new_push = locationz(latitude=lat, longitude=long, city=city, p_density=p_density)
+        new_push = locationz(latitude=latitude, longitude=longitude, city=city, p_density=p_density)
         db.session.add(new_push)
         db.session.commit() 
 

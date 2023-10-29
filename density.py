@@ -36,3 +36,23 @@ filtered_df.to_csv('nyc_zipcodes.csv', index=False) # create final list with all
 # NEW CSV FILE NAME: nyc_zipcodes.csv (Contains, Brooklyn, Queens, Manhattan (New York), Bronx and Staten Island)
 
 
+
+# RESEARCH DOWN HERE
+
+lat = 40.64509741769572
+long = -73.97994976081495
+# ideally should get zipcode 11218
+# round it to the nearest 2th decimal
+
+
+# Round down the latitude and longitude to two decimal places
+rounded_lat = int(lat * 100) / 100
+rounded_long = int(long * 100) / 100
+
+#print(rounded_lat,rounded_long)
+
+nycInfo = pd.read_csv('nyc_zipcodes.csv')
+#filtered_row = nycInfo[(nycInfo['lat'].apply(int) == rounded_lat * 100) & (nycInfo['long'].apply(int) == rounded_long * 100)]
+#result = filtered_row['Zip']
+#print(result)
+#result = filter_row['Zip']

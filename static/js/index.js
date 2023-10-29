@@ -68,9 +68,10 @@ function initMap() {
 
      
      //console.log(JSON.stringify(event.latLng.toJSON(), null, 2));
+     //alert(JSON.stringify(event, null, 2)) - NOTE, DOES NOT TELL US ANY DATA ON ZIPCODE
      let entry = JSON.stringify(event.latLng.toJSON(), null, 2);
      console.log(entry);
-
+      /*Code to add data using the fetch api */
      fetch ('/add_data', {
       method : "POST",
       credentials : 'include',
