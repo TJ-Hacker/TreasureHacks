@@ -5,10 +5,7 @@ from sqlalchemy.sql import func
 from passwords import *
 import json
 import pandas as pd
-import reverse_geocoder as rg
-import pprint
 import os
-import openai
 # NEW REQUIREMENTS.TXXT
 # set up all the necessary keys
 app = Flask(__name__)
@@ -18,45 +15,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db' # initialize fla
 db = SQLAlchemy(app) # initialize flask sql database, db
 
 
-openai.api_key = bam_key
-openai.api_base = "https://bsmp2023.openai.azure.com/"
-openai.api_type = 'azure'
-openai.api_version = "2023-03-15-preview"
-OPENAI_MODEL = "gpt-35-turbo"
-
 nycInfo = pd.read_csv('nyc_zipcodes.csv')
 # all functions
-
-
-
-# get name of city
-def reverseGeocode(coordinates):
-    result = rg.search(coordinates)
-     
-    # result is a list containing ordered dictionary.
-    return result[0]['name']
-
-
-# USE THE OPENAI from the BSMP
-
-def ai_gen(city):
-  response = openai.ChatCompletion.create(
-    engine=OPENAI_MODEL,
-    messages=[
-      {
-        "role": "system",
-        "content": "Get the city and retrieve the population density and only the population density, meaning only respond with the number and not any text or other characters besides digits"
-      },
-      {
-        "role": "user",
-        "content": city
-      },
-    ])
-  
-  generated_text = response['choices'][0]['message']['content']
-  print(generated_text)
-  
-  return generated_text
 
 # database class
 class locationz(db.Model):
