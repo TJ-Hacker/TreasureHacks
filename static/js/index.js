@@ -66,24 +66,6 @@ function initMap() {
         
      });
 
-     
-     //console.log(JSON.stringify(event.latLng.toJSON(), null, 2));
-     //alert(JSON.stringify(event, null, 2)) - NOTE, DOES NOT TELL US ANY DATA ON ZIPCODE
-
-     //let entry = JSON.stringify(event.latLng.toJSON(), null, 2);
-     //console.log(entry);
-      /*Code to add data using the fetch api */
-      
-     /*fetch ('/add_data', {
-      method : "POST",
-      credentials : 'include',
-      body : JSON.stringify(entry),
-      cache : "no-cache",
-      headers : new Headers ({
-        "content-type" :"application/json"
-     })
-   }).then(location.reload());
-    })*/
     let geocoder = new google.maps.Geocoder();
     let latLng = event.latLng;
     
@@ -138,19 +120,18 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
 
 window.initMap = initMap;
 
-
-
-
-
 // TEST FOR ME
 
 let x;
-
+// Fetch from the python file (check /data)
 fetch('/data')
 .then(response => response.json())
 .then(data => {
-//    console.log(data);
+    //console.log(data);
 //    const geocoder = new google.maps.Geocoder();
+
+// Code below starts at 0 and goes till end of the data.length (note that this depends on how large)
+
     for(let i = 0; i < data.length; i++){
       
         let markerA = new google.maps.Marker({
@@ -195,15 +176,7 @@ fetch('/data')
         //console.log("delete");
         markerA.setMap(null);
         let entry = JSON.stringify(markerA.position.toJSON(), null, 2);
-        fetch ('/delete_data', {
-          method : "POST",
-          credentials : 'include',
-          body : JSON.stringify(entry),
-          cache : "no-cache",
-          headers : new Headers ({
-            "content-type" :"application/json"
-         })
-       })
+        
        }
        let time = date.toLocaleTimeString();
        var infowindow = new google.maps.InfoWindow({

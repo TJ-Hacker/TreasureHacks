@@ -35,7 +35,7 @@ def home():
     return render_template('home.html', api_key=api_key)
 
 
-#print(all_coords)
+
 # SEND THE DATA TO THE JAVASCRIPT FILE 
 @app.route('/data')
 def data():
@@ -115,7 +115,7 @@ def delete_data():
         long = float(longitude)
 
         print(lat, long)
-        
+        # Check if the latitude and longitude exist
         latt = locationz.query.filter_by(latitude=lat).first()
         longg = locationz.query.filter_by(longitude=long).first()
         if latt and longg:
