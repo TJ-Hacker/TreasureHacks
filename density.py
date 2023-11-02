@@ -61,6 +61,23 @@ nycInfo = pd.read_csv('nyc_zipcodes.csv')
 zip  = 10011
 
 
-density = nycInfo.query(f"Zip=={zip}")["density"].iloc[0] # iloc - access the first element in this series 
-print(density)
+#density = nycInfo.query(f"Zip=={zip}")["density"].iloc[0] # iloc - access the first element in this series 
+#print(density)
 #print(type(density)) # returns a float
+
+# MAP OUT THE HIGHEST DENSITY
+
+
+#print(nycInfo['density'].max())
+#print(((nycInfo['density'].max() - nycInfo['density'].median())/2)-nycInfo['density'].max())
+#print(nycInfo['density'].median())
+#print(nycInfo['density'].min())
+print(8398.75/2)
+
+# REFER TO THESE MEASUREMENTS FOR THE POPULATION DENSITY DATA AND THE RISK ALGORITHM
+
+# MaxL 56520.9
+# 3rd Quartile: 32459.8
+#Median: 8398.75
+# 2nd quartile: 4199.37
+# Min: 0

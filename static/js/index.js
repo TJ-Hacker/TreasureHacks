@@ -18,6 +18,7 @@ function initMap() {
     center: { lat: 40.650002, lng: -73.949997 },
     zoom: 15,
     disableDefaultUI: true,
+    mapTypeId: 'satellite' // NOTE FOR ESHAAN: CHANGED TO SATELLITE VIEW 
     // fullscreenControl: false
   });
   infoWindow = new google.maps.InfoWindow();
@@ -146,38 +147,86 @@ fetch('/data')
        
        let currDate = new Date();
        let date = new Date(data[i][2]);
-       let diffe = diff_minutes(currDate, date);
-       console.log("time difference" + diffe);
+       let diffe = diff_minutes(currDate, date); // Note: in minutes
+       console.log("time difference: " + diffe + ' minutes');
 
        let density = parseInt(data[i][3]);
        let density_val;
-       console.log("density" + density);
-       if(density<=500){
+       console.log("density: " + density);
+       // Refer to this python file: density.py for these measurements 
+       if(density<=4199){
         density_val = 0;
        }
-       else if(density<=10000){
+       else if(density<=8938 && density>4199){
         density_val = 1;
+        markerA.icon.url = "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png"
+       }
+       else if (density> 8938 && density<=32459){
+        density_val = 2;
+        markerA.icon.url = "http://maps.google.com/mapfiles/ms/icons/purple-dot.png"
        }
        else{
-        density_val = 2;
+        // NOTE, IN 5 MINUTES THIS SHOULD DISAPPEAR AS PARKING WILL BE TAKEN FAST
+        density_val = 5;
         markerA.icon.url = "http://maps.google.com/mapfiles/ms/icons/red-dot.png"
        }
+
+       /* Comment out for now, re-work the time_risk and density data  */
+
+       
        let time_risk = 0;
-       if(diffe>20){
+       if(diffe >5 && diffe<10){
         time_risk = 1;
        }
+       if(diffe<10 && diffe>=5 ){
+        time_risk = 1.5;
+       }
+       else if(diffe>=10 && diffe<13){
+        time_risk = 2;
+       }
+       else if(diffe>=13 && diffe<16){
+        time_risk = 3;
+       }
+       else if(diffe>=16 && diffe<20){
+        time_risk = 5;
+       }
+       // Note, it's rare for parking space to stay for 20 minutes in NYC! After 20 minute the data should be GONE
+       else if(diffe>=20){
+        //markerA.setMap(null); # don't need if deleted 
+        let entry = JSON.stringify(markerA.position.toJSON(), null, 2);
+        // DELETE DATA 
+        fetch ('/delete_data', {
+          method : "POST",
+          credentials : 'include',
+          body : JSON.stringify(entry),
+          cache : "no-cache",
+          headers : new Headers ({
+            "content-type" :"application/json"
+         })
+       }).then(() => location.reload()) // NOTE A POTENTIAL ISSUE: IF THERES LOTS OF PEOPLE AND THOUSANDS AND THOUSANDS OF TAGS THAN IT MIGHT JUST REFRESH EVERY SECOND OR SO
+       }
+
+
        let combined_risk = time_risk + density_val;
        //console.log(combined_risk);
 
-       if(density_val == 1 && time_risk == 1){
-        markerA.icon.url = "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png"
-       }
-       if(combined_risk>=4){
+       if(combined_risk>5){
         //console.log("delete");
-        markerA.setMap(null);
+        //markerA.setMap(null);
+
+        //DELETE DATA
         let entry = JSON.stringify(markerA.position.toJSON(), null, 2);
-        
-       }
+        fetch ('/delete_data', {
+          method : "POST",
+          credentials : 'include',
+          body : JSON.stringify(entry),
+          cache : "no-cache",
+          headers : new Headers ({
+            "content-type" :"application/json"
+         })
+       })
+       } 
+
        let time = date.toLocaleTimeString();
        var infowindow = new google.maps.InfoWindow({
         content: "<p style='color: black; font-size: 20px'> Parking Spot Available  <br> Time Posted: " + time +" <br> " + diff_minutes(currDate, date) +  " minutes ago <br> Double click if the spot has been taken or if you took it!</p> <br> <img src='static/ParkingIcon.png' style='width: 100px; height: 100px'></img>"

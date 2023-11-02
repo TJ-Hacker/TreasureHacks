@@ -194,6 +194,9 @@ For Pre-loader
     background-color: red;
   }
   
+  .purple {
+    background-color: purple;
+  }
   /* Responsive styles */
   @media (max-width: 600px) {
     .key-item-label {
