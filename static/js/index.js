@@ -121,10 +121,57 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
 
 window.initMap = initMap;
 
-// TEST FOR ME
+// FETCHED DATA FROM THE PARKINGMETERS CSV FILE
+// NOTE FOR GROUP, CACHED CSV DATA (METER)
+fetch('/cached_csv_data')
+.then(response => response.json())
+.then(data => {
+    // Process and use the cached CSV data in your JavaScript code
+    //console.log(typeof(data));
+    //console.log(data.length);
+    for(let i = 0; i < data.length; i++){
+      (function(i) {
+
+        //console.log(data[i]['Latitude']); // WAY TO GET LATITUDE DATA
+        //console.log(data[i]);
+        latitude = data[i]['Latitude']
+        longitude = data[i]['Longitude']
+        meterHours = data[i]['Meter_Hours']
+        cellPay = data[i]['Pay By Cell Number']
+        //console.log(latitude, longitude, cellPay, meterHours);
+
+        let meterMarker = new google.maps.Marker({
+          position: {lat: latitude, lng: longitude},
+          icon: {
+           url: "static/icons/parkingmeter.png"
+            //url: "./static/Button_Icon_Green.svg.png"
+          },
+          map: map,
+          draggable: false
+       });
+
+       // ADD IN INFORMATION 
+       var infowindow = new google.maps.InfoWindow({
+        content: "<h1 style='color: black; font-size: 15, font: Times New Roman'>Meter Parking!</h1> </br> <p style='color: black; font-size: 15, font: Times New Roman'> Meter Usage: " + meterHours + " </br> Pay By Phone: " + cellPay+  " </br> Note that this is from our  <b style='color: black'>database!</b> </p>"
+       });
+       
+       meterMarker.addListener('mouseover', function() {
+        infowindow.open(map, meterMarker);
+       });
+
+       meterMarker.addListener('mouseout', function() {
+        infowindow.close();
+       });
+       
+       ;})(i) // function (i) prevents the asynch info by keeping it all together 
+
+    } // end {} for the for loop
+    
+});
+
 
 let x;
-// Fetch from the python file (check /data)
+// Fetch from the python file (check /data) (FETCHED FROM FLASK-SQL DATABASE)
 fetch('/data')
 .then(response => response.json())
 .then(data => {
@@ -229,7 +276,7 @@ fetch('/data')
 
        let time = date.toLocaleTimeString();
        var infowindow = new google.maps.InfoWindow({
-        content: "<p style='color: black; font-size: 20px'> Parking Spot Available  <br> Time Posted: " + time +" <br> " + diff_minutes(currDate, date) +  " minutes ago <br> Double click if the spot has been taken or if you took it!</p> <br> <img src='static/ParkingIcon.png' style='width: 100px; height: 100px'></img>"
+        content: "<p style='color: black; font-size: 20px'> Parking Spot Available  <br> Time Posted: " + time +" <br> " + diff_minutes(currDate, date) +  " minutes ago <br> Double click if the spot has been taken or if you took it!</p> <br> "
        });
        
        markerA.addListener('mouseover', function() {

@@ -3,12 +3,14 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Column, DateTime
 from sqlalchemy.sql import func
 from passwords import *
+from flask_caching import Cache
 import json
 import pandas as pd
 import os
 # NEW REQUIREMENTS.TXXT
 # set up all the necessary keys
 app = Flask(__name__)
+cache = Cache(app, config={'CACHE_TYPE': 'simple'})  # Use in-memory caching for simplicity
 app.config['SECRET_KEY'] = os.environ.get('FLASK_PASSWORD') # note make sure this secret key is hidden at all times
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db' # initialize flask sql database
@@ -95,6 +97,22 @@ def add_data():
         return redirect(url_for('home'))
     res = make_response(jsonify({"messsage":"JSON"}), 200)
     return res 
+
+
+# Load the CSV data and cache it when the application starts
+@app.before_first_request
+def load_and_cache_csv_data():
+    csv_data = pd.read_csv('parkingmeter.csv')
+    cache.set('csv_data', csv_data)
+
+# Endpoint to retrieve cached CSV data
+@app.route('/cached_csv_data')
+def get_cached_csv_data():
+    cached_data = cache.get('csv_data')
+    if cached_data is not None:
+        return jsonify(cached_data.to_dict(orient='records'))
+    return jsonify([])
+
 
 
 # make a function to delete the location data (Note: Authentication not implemented yet!)
