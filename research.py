@@ -101,3 +101,47 @@ GRAB PARKING METER SPOT DATA!
 selected_columns = ['Meter_Hours', 'Latitude', 'Longitude', 'Pay By Cell Number']
 filtered_df = meters[selected_columns]
 filtered_df.to_csv('parkingmeter.csv', index=False) # save as new csv file"""
+
+
+"""
+Next part of project:
+Get veichile collision data (NYC open data) and find the areas (zipcodes) with the most amount of crash crashes/vehicle issue and add a possible shading over it / warn the users about the risk
+
+Collision Data: (https://data.cityofnewyork.us/Public-Safety/Motor-Vehicle-Collisions-Crashes/h9gi-nx95/explore)
+
+Logic Part:
+
+For each zipcode, loop through it and count the value_count() of each insident, murders are worth 2x more than injuries, map out and create an algorithm that sees the risk of the zipcode (in terms of car crashing!)
+    - All murders add 2 to the score while all injured add 1 to the score, as  murders worse
+    - Create a new dataframe labeled Score (higher score the worst)
+    - Take first, second, third and fourth quartile data for each zipcode
+    - For this program as of now only have the worst 10% (around 25 zipcodes) being used for the program
+"""
+
+#motorCrash = pd.read_csv('motorcrashes.csv')
+#crashData = motorCrash.fillna(0) # replace all the null values with the 0 instead
+
+# delete all column where the zipcode is equal to 0
+#crashData = crashData[crashData['ZIP CODE'] != 0] 
+#crashData.to_csv('crashes.csv', index=False) # NEW CSV FILE
+
+#crashData = pd.read_csv('crashes.csv')
+# group the data and sum using aggregate 
+"""
+zipcode_counts = crashData.groupby('ZIP CODE').agg({
+    'NUMBER OF PERSONS INJURED': 'sum',
+    'NUMBER OF PERSONS KILLED': 'sum',
+    'NUMBER OF CYCLIST INJURED': 'sum',
+    'NUMBER OF CYCLIST KILLED': 'sum',
+    'NUMBER OF MOTORIST INJURED': 'sum',
+    'NUMBER OF MOTORIST KILLED': 'sum'
+}).reset_index()"""
+
+#print(zipcode_counts)
+
+# MAKE ZIPCODE COUNTS HERE A NEW CSV FILE 
+# 235 CHOICES, ADDS ALL THE DATA FOR EACH ZIPCODE, LESS TIME COMPLEXITY
+#zipcode_counts.to_csv('collisions.csv', index=False)
+
+
+# PART THREE OF PROGRAM ADD THE VALUE OF COLLISION DATA AS A NEW DATAFRAME REFER TO LINE 116 FOR ALGORITHM LOGIC 
