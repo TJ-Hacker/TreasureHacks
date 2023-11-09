@@ -149,4 +149,5 @@ def delete_data():
 
 if __name__ == "__main__":
     db.create_all() # create database
+    #app.run(host=ip, port=5000) NOTE USE THIS TO TEST ON A MOBILE DEVICE 
     app.run(debug=True)

@@ -11,16 +11,32 @@ if (!sessionStorage.getItem('page_reloaded')) {
 let map, infoWindow;
 // Create info
 
+// REFER TO: https://developers.google.com/maps/documentation/javascript/examples/control-bounds-restriction#maps_control_bounds_restriction-javascript 
+// NYC BOUNDS (PROGRAM IS NYC SPECIFIC )
+// NOTE DO NOT DRASTICALLY CHANGE THE NORTH, SOUTH, WEST OR EAST OR ELSE IT WILL PAN OUT / ZOOM OUT TO MUCH
+const NYC_BOUNDS = {
+  north: 40.987577, 
+  south: 40.477398, 
+  west: -74.259090, 
+  east: -73.800272,
+};
+const NYC_CENTER = { lat: 40.7128, lng: -74.0060 };
 
 function initMap() {
 
   map = new google.maps.Map(document.getElementById("map"), {
-    center: { lat: 40.650002, lng: -73.949997 },
-    zoom: 15,
+    center: NYC_CENTER,
+    restriction: {
+      latLngBounds: NYC_BOUNDS,
+      strictBounds: false,
+    },
+    zoom: 11,
     disableDefaultUI: true,
     mapTypeId: 'satellite' // NOTE FOR ESHAAN: CHANGED TO SATELLITE VIEW 
     // fullscreenControl: false
   });
+
+
   infoWindow = new google.maps.InfoWindow();
   const locationButton = document.createElement("button");
   locationButton.textContent = "Current Location";
