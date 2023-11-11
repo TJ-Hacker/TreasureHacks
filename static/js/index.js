@@ -124,33 +124,8 @@ fetch('/data')
        
        let currDate = new Date();
        let date = new Date(data[i][2]);
-       let diffe = diff_minutes(currDate, date);
-       //console.log("time difference" + diffe);
 
-       let density = parseInt(data[i][3]);
-       let density_val;
-       //console.log("density" + density);
-       if(density<=500){
-        density_val = 0;
-       }
-       else if(density<=10000){
-        density_val = 1;
-       }
-       else{
-        density_val = 2;
-        markerA.icon.url = "http://maps.google.com/mapfiles/ms/icons/red-dot.png"
-       }
-       let time_risk = 0;
-       if(diffe>20){
-        time_risk = 1;
-       }
-       let combined_risk = time_risk + density_val;
-       //console.log(combined_risk);
-
-       if(density_val == 1 && time_risk == 1){
-        markerA.icon.url = "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png"
-       }
-       if(combined_risk>=4){
+       if(diff_minutes(currDate, date)>50){
         //console.log("delete");
         markerA.setMap(null);
         let entry = JSON.stringify(markerA.position.toJSON(), null, 2);
@@ -167,7 +142,7 @@ fetch('/data')
        let time = date.toLocaleTimeString();
        console.log(time);
        var infowindow = new google.maps.InfoWindow({
-        content: "<p style='color: black; font-size: 20px'>Parking Spot available <br> Time Posted: " + time +" <br> " + diff_minutes(currDate, date) +  " minutes ago <br> Double click if the spot has been taken or if you took it!</p>"
+        content: "<p style='color: black; font-size: 20px'>Parking Spot <b> available </b> <br> <b>Time Posted:<b> " + time +" <br> Double click if the spot has been taken or if you took it!</p>"
        });
        
        markerA.addListener('mouseover', function() {

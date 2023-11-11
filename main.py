@@ -15,6 +15,14 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db' # initialize flask sql database
 db = SQLAlchemy(app) # initialize flask sql database, db
 
+
+openai.api_key = bam_key
+openai.api_base = "https://bsmp2023.openai.azure.com/"
+openai.api_type = 'azure'
+openai.api_version = "2023-03-15-preview"
+OPENAI_MODEL = "gpt-35-turbo"
+
+
 # all functions
 
 # get name of city
@@ -23,6 +31,29 @@ def reverseGeocode(coordinates):
      
     # result is a list containing ordered dictionary.
     return result[0]['name']
+
+
+# USE THE OPENAI from the BSMP
+
+def question_gen(txt_prompt):
+  response = openai.ChatCompletion.create(
+    engine=OPENAI_MODEL,
+    messages=[
+      {
+        "role": "system",
+        "content": "You are a top level PDF extractor and question creator"
+      },
+      {
+        "role": "user",
+        "content": txt_prompt
+      },
+    ])
+  
+  generated_text = response['choices'][0]['message']['content']
+
+  questions = generated_text.split("\n") # turn the string to a list
+  return questions
+
 
 class locationz(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -72,8 +103,9 @@ def add_data():
 
         # PUSH TO DATABASE
         coordinates = (lat,long)
+        print(coordinates)
         city = reverseGeocode(coordinates)
-        print(type(city))
+        #print(type(city))
         #print(city)
         openai.api_key = open_ai_key # USING THE OPEN AI API KEY!
 
@@ -82,7 +114,8 @@ def add_data():
     engine="text-davinci-002"
 )
         generated_text = ai_response.choices[0].text
-        print(generated_text)
+        #print(generated_text)
+
         number = ""
         firstNumFound = False
         for i in generated_text:
