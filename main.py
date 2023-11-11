@@ -3,63 +3,30 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Column, DateTime
 from sqlalchemy.sql import func
 from passwords import *
+from flask_caching import Cache
 import json
-import reverse_geocoder as rg
-import pprint
+import pandas as pd
 import os
-import openai
-
+# NEW REQUIREMENTS.TXXT
+# set up all the necessary keys
 app = Flask(__name__)
+cache = Cache(app, config={'CACHE_TYPE': 'simple'})  # Use in-memory caching for simplicity
 app.config['SECRET_KEY'] = os.environ.get('FLASK_PASSWORD') # note make sure this secret key is hidden at all times
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db' # initialize flask sql database
 db = SQLAlchemy(app) # initialize flask sql database, db
 
 
-openai.api_key = bam_key
-openai.api_base = "https://bsmp2023.openai.azure.com/"
-openai.api_type = 'azure'
-openai.api_version = "2023-03-15-preview"
-OPENAI_MODEL = "gpt-35-turbo"
-
-
+nycInfo = pd.read_csv('nyc_zipcodes.csv')
 # all functions
 
-# get name of city
-def reverseGeocode(coordinates):
-    result = rg.search(coordinates)
-     
-    # result is a list containing ordered dictionary.
-    return result[0]['name']
-
-
-# USE THE OPENAI from the BSMP
-
-def question_gen(txt_prompt):
-  response = openai.ChatCompletion.create(
-    engine=OPENAI_MODEL,
-    messages=[
-      {
-        "role": "system",
-        "content": "You are a top level PDF extractor and question creator"
-      },
-      {
-        "role": "user",
-        "content": txt_prompt
-      },
-    ])
-  
-  generated_text = response['choices'][0]['message']['content']
-
-  questions = generated_text.split("\n") # turn the string to a list
-  return questions
-
-
+# database class
 class locationz(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     latitude = db.Column(db.Float, nullable=False) # get the values z
     longitude = db.Column(db.Float, nullable=False) # get the valuez
     date = db.Column(db.DateTime(timezone=True), default=func.now())
+    zipcode = db.Column(db.Integer, nullable=False) # get the integer
     city = db.Column(db.String, nullable=False)
     p_density = db.Column(db.Float, nullable=False)
    
@@ -69,13 +36,9 @@ class locationz(db.Model):
 def home():
     return render_template('home.html', api_key=api_key)
 
-#print(locationz.query.filter().all()[0])
-#print(type(locationz.query.filter().all()))
 
 
-
-#print(all_coords)
-
+# SEND THE DATA TO THE JAVASCRIPT FILE 
 @app.route('/data')
 def data():
     x = locationz.query.filter().all()
@@ -86,56 +49,70 @@ def data():
     return jsonify(my_list)
 
 
-
+# add data into the database
 @app.route('/add_data', methods=['POST'])
 def add_data():
     if request.method == 'POST':
         req = request.get_json() # get json data which turns into string
-        #print(req)
 
-        new_req = json.loads(req)
-        latitude = new_req['lat']
-        longitude = new_req['lng']
-        #print(latitude)
-        #print(longitude)
-        lat = float(latitude)
-        long = float(longitude) # conver to float
+        # NOTE ALL 3 ARE STRING VALUES 
+        latitude = req['latitude']
+        longitude = req['longitude']
+        zipcode = req['zipcode']
+        #city = req['city']
+        # Print the extracted values.
+        print(f'Latitude: {latitude}, Longitude: {longitude}, Zipcode: {zipcode}') # returns latitude, longitude and ZIPCODE!
 
-        # PUSH TO DATABASE
-        coordinates = (lat,long)
-        print(coordinates)
-        city = reverseGeocode(coordinates)
-        #print(type(city))
-        #print(city)
-        openai.api_key = open_ai_key # USING THE OPEN AI API KEY!
+        # Get the city based on the zipcode (NOTE THIS ONLY FOR NYC SO NYC ZIP CODES only - Future plans may include more cities)
+        # Source of csv file: https://www.fourfront.us/data/datasets/us-population-density/ - check density.py file for more notes 
+        # Brooklyn Zipcodes: 11201 - 11256
+        # Queens Zipcodes: 11004 - 11697
+        # New York (Manhattan) Zipcodes: 10001 - 10286
+        # Bronx Zipcodes: 10451 - 10475
+        # Staten Island ZipCodes: 10301 - 10314
 
-        ai_response = openai.Completion.create(
-    prompt=f"What is the population density of {city} and only give a number/float, no other words just one singular number",
-    engine="text-davinci-002"
-)
-        generated_text = ai_response.choices[0].text
-        #print(generated_text)
+        # use if statements to assign city value based on the zipcode data (from csv )
+        city = ""
+        zip = int(zipcode)
+        if zip >= 11201 and zip <= 11256:
+            city = 'Brooklyn'
+        elif zip >= 11004 and zip<= 11697:
+            city = 'Queens'
+        elif zip >= 10001 and zip<= 10286:
+            city = 'Manhattan'
+        elif zip >= 10451 and zip<= 10475:
+            city = 'Bronx'
+        else:
+            city = 'Staten Island'
 
-        number = ""
-        firstNumFound = False
-        for i in generated_text:
-            if i.isnumeric():
-                number+=i
-                firstNumFound = True
-            if firstNumFound:
-                if i == '.' or i == ' ':
-                    break
+        print(city)
+        
+        # Find population density using the nyc_zipcodes.csv
 
-        p_density = float(number)
-        #print(p_density)
-        new_push = locationz(latitude=lat, longitude=long, city=city, p_density=p_density)
+        p_density = nycInfo.query(f"Zip=={zip}")["density"].iloc[0]
+        print(p_density)
+        new_push = locationz(latitude=float(latitude), longitude=float(longitude), city=city, p_density=p_density, zipcode=zip)
         db.session.add(new_push)
-        db.session.commit()
-
-        #print(latitude, longitude)
+        db.session.commit() 
         return redirect(url_for('home'))
     res = make_response(jsonify({"messsage":"JSON"}), 200)
     return res 
+
+
+# Load the CSV data and cache it when the application starts
+@app.before_first_request
+def load_and_cache_csv_data():
+    csv_data = pd.read_csv('parkingmeter.csv')
+    cache.set('csv_data', csv_data)
+
+# Endpoint to retrieve cached CSV data
+@app.route('/cached_csv_data')
+def get_cached_csv_data():
+    cached_data = cache.get('csv_data')
+    if cached_data is not None:
+        return jsonify(cached_data.to_dict(orient='records'))
+    return jsonify([])
+
 
 
 # make a function to delete the location data (Note: Authentication not implemented yet!)
@@ -156,7 +133,7 @@ def delete_data():
         long = float(longitude)
 
         print(lat, long)
-        
+        # Check if the latitude and longitude exist
         latt = locationz.query.filter_by(latitude=lat).first()
         longg = locationz.query.filter_by(longitude=long).first()
         if latt and longg:
@@ -172,4 +149,5 @@ def delete_data():
 
 if __name__ == "__main__":
     db.create_all() # create database
+    #app.run(host=ip, port=5000) NOTE USE THIS TO TEST ON A MOBILE DEVICE 
     app.run(debug=True)
