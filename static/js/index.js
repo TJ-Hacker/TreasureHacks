@@ -198,7 +198,7 @@ fetch('/data')
 // Code below starts at 0 and goes till end of the data.length (note that this depends on how large)
 
     for(let i = 0; i < data.length; i++){
-      
+      (function(i) {
         let markerA = new google.maps.Marker({
           position: {lat: data[i][0], lng: data[i][1]},
           icon: {
@@ -290,11 +290,11 @@ fetch('/data')
          })
        })
        } 
-
+       
        let time = date.toLocaleTimeString();
        console.log(time);
        var infowindow = new google.maps.InfoWindow({
-        content: "<p style='color: black; font-size: 20px'> Parking Spot Available  <br> Time Posted: " + time +" <br> " + diff_minutes(currDate, date) +  " minutes ago <br> Double click if the spot has been taken or if you took it!</p> <br> <img src='static/ParkingIcon.png' style='width: 100px; height: 100px'></img>"
+        content: "<p style='color: black; font-size: 20px'> Parking Spot Available  <br> Time Posted: " + time +" <br> " + diffe +  " minutes ago <br> Double click if the spot has been taken or if you took it!</p> <br> <img src='static/ParkingIcon.png' style='width: 100px; height: 100px'></img>"
        });
        
        markerA.addListener('mouseover', function() {
@@ -304,7 +304,7 @@ fetch('/data')
        markerA.addListener('mouseout', function() {
         infowindow.close();
        });
-
+       
 
        google.maps.event.addListener(markerA,'dblclick', function(event){
         markerA.setMap(null);
@@ -320,7 +320,7 @@ fetch('/data')
             "content-type" :"application/json"
          })
        })
-     });
+     });})(i) 
        
       
     }
