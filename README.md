@@ -22,6 +22,9 @@ As of 10/28/2023 we are starting the project again!
 # TESTING
 1) Tested the program on my phone, need to work on responsiveness more with celluar device.
 
+# QUICK DEMO VIDEO:
+https://clipchamp.com/watch/aqFcxEQ7Prk?utm_source=share&utm_medium=social&utm_campaign=watch 
+
 # CURRENT IMAGES OF THE PROJECT!
 
 ![parkr](https://github.com/TJ-Hacker/TreasureHacks/assets/102444808/c1e496d8-3525-41af-bad7-cda9866ea1ee)
@@ -31,3 +34,5 @@ As of 10/28/2023 we are starting the project again!
 ![parkr2](https://github.com/TJ-Hacker/TreasureHacks/assets/102444808/f98b24a7-3ef5-451b-9dad-c0ec32f36328)
 
 ![parkr3](https://github.com/TJ-Hacker/TreasureHacks/assets/102444808/e7be134c-36db-42c7-91a7-826e266516bb)
+
+
