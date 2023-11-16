@@ -111,7 +111,7 @@ Collision Data: (https://data.cityofnewyork.us/Public-Safety/Motor-Vehicle-Colli
 
 Logic Part:
 
-For each zipcode, loop through it and count the value_count() of each insident, murders are worth 2x more than injuries, map out and create an algorithm that sees the risk of the zipcode (in terms of car crashing!)
+For each zipcode, loop through it and count the value_count() of each insident, murders are worth 2x more than injuries. (Every murder add +2 to score, every injury add +1 to the score), map out and create an algorithm that sees the risk of the zipcode (in terms of car crashing!)
     - All murders add 2 to the score while all injured add 1 to the score, as  murders worse
     - Create a new dataframe labeled Score (higher score the worst)
     - Take first, second, third and fourth quartile data for each zipcode
@@ -145,3 +145,29 @@ zipcode_counts = crashData.groupby('ZIP CODE').agg({
 
 
 # PART THREE OF PROGRAM ADD THE VALUE OF COLLISION DATA AS A NEW DATAFRAME REFER TO LINE 116 FOR ALGORITHM LOGIC 
+#df = pd.read_csv('collisions.csv')
+
+# refer to line 115 - create a new dataframe
+#df = df.drop(index=0) # drop the first index as it has no zipcode correlated 
+#df['score'] = (df['NUMBER OF PERSONS INJURED'] + df['NUMBER OF CYCLIST INJURED'] + df['NUMBER OF MOTORIST INJURED'] + 2 * (df['NUMBER OF PERSONS KILLED'] + df['NUMBER OF CYCLIST KILLED'] + df['NUMBER OF MOTORIST KILLED']))
+
+
+#df.to_csv('crashDATA.csv', index=False) # NEW DATA WILL BE USED 
+
+dataFrame = pd.read_csv('crashDATA.csv')
+"""
+Get quartile for the risk of the ZIPCODE being hit
+Max Number - 400
+Quartile 1 - 252
+Quartile 2 (Median) - 104.124
+Quartile 3 - 52
+Min - 0
+
+print(dataFrame['score'].max())
+print((dataFrame['score'].max() + dataFrame['score'].mean()) / 2) #  Q1
+print(dataFrame['score'].mean())
+print((dataFrame['score'].min() + dataFrame['score'].mean()) / 2) #  Q3
+print(dataFrame['score'].min())
+
+"""
+

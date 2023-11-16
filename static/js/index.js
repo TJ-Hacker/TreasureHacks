@@ -102,6 +102,7 @@ function initMap() {
           longitude: longitude,
           zipcode: zipcode
         };
+        // Shade zipcode 10000 in red
     
         // Send the location data to the server using a fetch request.
         fetch('/add_data', {
