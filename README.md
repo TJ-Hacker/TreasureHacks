@@ -1,6 +1,9 @@
 # TreasureHacks
 Our repo for the 2022 TreasureHacks Hackathon
+
 View the devpost: https://devpost.com/software/parkr-97wdqu
+
+View the demo video: https://youtu.be/IE5Ta5ngLik
 
 
 As of 10/28/2023 we are starting the project again!
@@ -18,3 +21,7 @@ As of 10/28/2023 we are starting the project again!
 
 # TESTING
 1) Tested the program on my phone, need to work on responsiveness more with celluar device.
+
+# CURRENT IMAGES OF THE PROJECT!
+![parkr1](https://github.com/TJ-Hacker/TreasureH![parkr](https://github.com/TJ-Hacker/TreasureHacks/assets/102444808/c5e6cf91-cd74-42a3-b068-4570cb0400b9)
+acks/assets/102444808/691a2a57-6169-496e-bddd-28f5329af34a)

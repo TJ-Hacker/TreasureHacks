@@ -292,8 +292,9 @@ fetch('/data')
        } 
 
        let time = date.toLocaleTimeString();
+       console.log(time);
        var infowindow = new google.maps.InfoWindow({
-        content: "<p style='color: black; font-size: 20px'> Parking Spot Available  <br> Time Posted: " + time +" <br> " + diff_minutes(currDate, date) +  " minutes ago <br> Double click if the spot has been taken or if you took it!</p> <br> "
+        content: "<p style='color: black; font-size: 20px'> Parking Spot Available  <br> Time Posted: " + time +" <br> " + diff_minutes(currDate, date) +  " minutes ago <br> Double click if the spot has been taken or if you took it!</p> <br> <img src='static/ParkingIcon.png' style='width: 100px; height: 100px'></img>"
        });
        
        markerA.addListener('mouseover', function() {
